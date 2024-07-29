@@ -5,35 +5,45 @@ resource "aws_vpc" "main" {
  }
 }  
 
+
+
+
+
+
+
+
+
+
+
 #basically we are created VPC with lot of range.  
 #withing that vpc range you are taking the small area and creating a small range called subnet.   
 
 
 
-resource  "aws_subnet" "sub-1"  {                  #subnet 1  
-   vpc_id =  aws_vpc.main.id  
-   cidr_block = "10.0.0.0/24"
-   availability_zone = "us-east-1a" 
-   map_public_ip_on_launch = true
+# resource  "aws_subnet" "sub-1"  {                  #subnet 1  
+#    vpc_id =  aws_vpc.main.id  
+#    cidr_block = "10.0.0.0/24"
+#    availability_zone = "us-east-1a" 
+#    map_public_ip_on_launch = true
 
-}
+# }
 
-resource  "aws_subnet" "sub-2"  {                 # subnet 2 
-   vpc_id =  aws_vpc.main.id  
-   cidr_block = "10.0.1.0/24"
-   availability_zone = "us-east-1a" 
-   map_public_ip_on_launch = true
+# resource  "aws_subnet" "sub-2"  {                 # subnet 2 
+#    vpc_id =  aws_vpc.main.id  
+#    cidr_block = "10.0.1.0/24"
+#    availability_zone = "us-east-1a" 
+#    map_public_ip_on_launch = true
    
-}
+# }
 
 
 
-resource "aws_internet_gateway" "igw" {          #internet gateway 
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "internet-gateway"
-  }
-} 
+# resource "aws_internet_gateway" "igw" {          #internet gateway 
+#   vpc_id = aws_vpc.main.id
+#   tags = {
+#     Name = "internet-gateway"
+#   }
+# } 
 
 
 # resource "aws_route_table" "rt" {                     #route table  
