@@ -62,7 +62,6 @@ resource "aws_route_table" "private_route" {        #private route table
 }
 
 
-
 resource "aws_route_table_association" "making_public" {
   subnet_id      = aws_subnet.sub-1.id
   route_table_id = aws_route_table.public_route.id
@@ -108,6 +107,5 @@ resource "aws_security_group" "created_security_group" { #creating security grou
   }
 
 }
-
 
 
