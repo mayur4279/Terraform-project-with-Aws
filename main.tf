@@ -52,7 +52,7 @@ resource "aws_route_table" "public_route" { #public route table
 }
 
 
-resource "aws_route_table" "private_route" {        #private route table    
+resource "aws_route_table" "private_route" { #private route table    
   vpc_id = aws_vpc.main.id
 
   route = []
@@ -74,7 +74,7 @@ resource "aws_route_table_association" "making_private" {
 
 
 
-resource "aws_security_group" "created_security_group" { #creating security group  
+resource "aws_security_group" "proxy_security_group" { #creating security group for proxy server  
   vpc_id = aws_vpc.main.id
 
   ingress {
@@ -91,12 +91,6 @@ resource "aws_security_group" "created_security_group" { #creating security grou
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   egress {
 
@@ -106,6 +100,70 @@ resource "aws_security_group" "created_security_group" { #creating security grou
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+tags =  {
+  Name = "Proxy_group"
 }
 
+}
+
+
+resource "aws_security_group" "main_security_group" {  #creating security group for main server  
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "used for ssh port"
+
+  }
+
+  ingress {
+
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+  tags = {
+    Name = "Main_server"
+  }
+}
+
+
+
+resource "aws_instance" "proxy_server" {
+  ami = "ami-0427090fd1714168b"                      #amazon linux id  
+  instance_type = "t2.micro"                          
+  key_name = "netflixapp"
+  subnet_id = aws_subnet.sub-1.id 
+  vpc_security_group_ids = [aws_security_group.proxy_security_group.id]
+  tags = {
+    Name = "my_proxy_server"
+  }
+}
+
+
+resource "aws_instance" "main_server" {
+  ami = "ami-0427090fd1714168b"                      #amazon linux id  
+  instance_type = "t2.micro"                          
+  key_name = "netflixapp"
+  subnet_id = aws_subnet.sub-2.id 
+  vpc_security_group_ids = [aws_security_group.main_security_group.id] 
+  tags  = {  
+    Name = "my_main_server"
+  }
+}
 
