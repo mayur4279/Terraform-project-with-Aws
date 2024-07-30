@@ -123,7 +123,7 @@ resource "aws_instance" "main_server-1" {
   ami                    = "ami-0427090fd1714168b"
   instance_type          = "t2.micro"
   key_name               = "netflixapp"
-  subnet_id              = aws_subnet.sub-2.id
+  subnet_id              = aws_subnet.sub-1.id
   vpc_security_group_ids = [aws_security_group.main_security_group.id]
   user_data              = base64encode(file("server1-userdata.sh"))
   tags = {
@@ -252,3 +252,4 @@ output "main_server-3-ip" {
   description = "ip address_of_main_server_3"
   value       = aws_instance.main_server-3.public_ip
 }
+
